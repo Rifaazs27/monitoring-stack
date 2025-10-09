@@ -25,3 +25,10 @@ services:
       - GF_SECURITY_ADMIN_PASSWORD=admin
     depends_on:
       - prometheus
+
+  node-app:
+    build: ./app
+    container_name: node-app
+    ports:
+      - "8080:8080"
+
