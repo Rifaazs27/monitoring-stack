@@ -1,6 +1,3 @@
-Voici un README simple, clair et propre, parfait pour un projet scolaire ou pro.
-Pas de superflu, que l’essentiel. Uniquement du Markdown.
-
 # Monitoring Stack – Prometheus, Grafana, Node Exporter & Node.js
 
 Ce projet met en place une stack simple de monitoring sur une VM Azure à l’aide de :
