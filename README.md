@@ -66,8 +66,9 @@ scrape_configs:
   - job_name: 'node-exporter'
     static_configs:
       - targets: ['node-exporter:9100']
+```
 
-Structure du projet
+## Architecture Structure du projet
 monitoring-stack/
 │
 ├── node-app/
@@ -83,7 +84,7 @@ monitoring-stack/
 ├── docker-compose.yml
 └── README.md
 
-Commandes utiles
+##Commandes utiles
 
 Arrêter la stack :
 
@@ -95,22 +96,13 @@ Supprimer les volumes (réinitialisation complète) :
 docker compose down -v
 
 
-Tester l'application :
+##Tester l'application :
 
 curl http://localhost:8080
 curl http://localhost:8080/metrics
 
-Améliorations possibles
 
-Ajouter Alertmanager (alertes)
-
-Ajouter Loki + Promtail (logs)
-
-Ajouter une authentification Azure AD
-
-Déploiement automatisé via Terraform
-
-Conclusion
+##Conclusion
 
 Cette stack permet de mettre en place un monitoring simple et efficace sur une machine Azure en utilisant Docker.
 Elle offre une visibilité complète sur :
