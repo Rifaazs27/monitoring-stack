@@ -1,84 +1,52 @@
-# 📈 Monitoring Stack — Prometheus, Grafana, Node Exporter & Node.js
+Voici un README simple, clair et propre, parfait pour un projet scolaire ou pro.
+Pas de superflu, que l’essentiel. Uniquement du Markdown.
 
-Ce projet met en place une stack complète de **monitoring d’application et système** sur une **VM Azure** en utilisant :
+# Monitoring Stack – Prometheus, Grafana, Node Exporter & Node.js
 
-- **Prometheus** → collecte des métriques  
-- **Grafana** → visualisation des métriques  
-- **Node Exporter** → métriques système  
-- **Node.js** → exposition de métriques personnalisées  
-- **Docker Compose** → déploiement automatisé  
+Ce projet met en place une stack simple de monitoring sur une VM Azure à l’aide de :
 
-L’objectif est d’obtenir une solution de supervision moderne, simple à déployer et extensible.
-
----
-
-## 🧩 Architecture du projet
-
-La VM Azure héberge 4 conteneurs Docker :
-
-+--------------------------------------------------+
-| Azure Virtual Machine |
-| |
-| +----------------+ +-------------------+ |
-| | Node App | ---> | Prometheus | |
-| | (8080/metrics)| | (9090) | |
-| +----------------+ +-------------------+ |
-| ^ ^ |
-| | | |
-| +----------------+ | |
-| | Node Exporter | -----------------+ |
-| | (9100) | |
-| +----------------+ |
-| |
-| +------------------------+ |
-| | Grafana | |
-| | (3000) | |
-| +------------------------+ |
-+--------------------------------------------------+
-
-yaml
-Copier le code
+- Node.js (application + métriques personnalisées)
+- Prometheus (scraping des métriques)
+- Node Exporter (métriques système)
+- Grafana (dashboards)
+- Docker & Docker Compose (orchestration)
 
 ---
 
-## 🚀 Stack technique
+## Architecture
 
-- **Node.js** → application exposant `/metrics`  
-- **Express + prom-client** → génération de métriques  
-- **Node Exporter** → exposition des métriques systèmes de la VM  
-- **Prometheus** → scraping des métriques  
-- **Grafana** → dashboards  
-- **Docker Compose** → orchestration  
-- **Volumes Docker** → persistance des données  
+
+
+VM Azure
+│
+├── Node App (8080)
+├── Node Exporter (9100)
+├── Prometheus (9090)
+└── Grafana (3000)
+
+
+Prometheus récupère :
+- les métriques de l'application Node.js
+- les métriques système via Node Exporter  
+Grafana affiche ces données sous forme de dashboards.
 
 ---
 
-## 📦 Installation & Déploiement
+## Installation
 
-### 1️⃣ Cloner le dépôt
+### 1. Cloner le projet
 
 ```bash
 git clone https://github.com/Rifaazs27/monitoring-stack.git
 cd monitoring-stack
-2️⃣ Lancer toute la stack
-bash
-Copier le code
+
+2. Lancer la stack
 docker compose up -d --build
-3️⃣ Vérifier les conteneurs
-bash
-Copier le code
+
+3. Vérifier les conteneurs
 docker ps
-Vous devez voir :
 
-prometheus (9090)
-
-grafana (3000)
-
-node-exporter (9100)
-
-node-app (8080)
-
-🌐 Accès aux services
+Accès aux services
 Service	URL
 Node App	http://IP_PUBLIC:8080
 Metrics App	http://IP_PUBLIC:8080/metrics
@@ -86,11 +54,13 @@ Prometheus	http://IP_PUBLIC:9090
 Node Exporter	http://IP_PUBLIC:9100/metrics
 Grafana	http://IP_PUBLIC:3000
 
-⚙️ Configuration de Prometheus
-Le fichier prometheus.yml contient les targets scrappées :
+Identifiants Grafana :
+admin / admin
 
-yaml
-Copier le code
+Configuration Prometheus
+
+Extrait du fichier prometheus.yml :
+
 scrape_configs:
   - job_name: 'node-app'
     static_configs:
@@ -99,25 +69,8 @@ scrape_configs:
   - job_name: 'node-exporter'
     static_configs:
       - targets: ['node-exporter:9100']
-📊 Dashboards Grafana
-Accéder à Grafana
-→ http://IP_PUBLIC:3000
 
-Se connecter (admin / admin)
-
-Ajouter Prometheus comme datasource :
-
-URL : http://prometheus:9090
-
-Importer des dashboards :
-
-Node Exporter Full (ID : 1860)
-
-Dashboard personnalisé pour les métriques de l'app
-
-📁 Structure du projet
-pgsql
-Copier le code
+Structure du projet
 monitoring-stack/
 │
 ├── node-app/
@@ -129,65 +82,44 @@ monitoring-stack/
 │   └── prometheus.yml
 │
 ├── grafana/
-│   └── (données persistées via volumes)
 │
 ├── docker-compose.yml
-├── .gitignore
 └── README.md
-🔒 Persistance des données
-Grâce aux volumes Docker, les données sont conservées :
 
-prometheus-data → stocke l’historique des métriques
+Commandes utiles
 
-grafana-data → stocke les dashboards, utilisateurs, datasources
+Arrêter la stack :
 
-🧪 Tests & Démonstration
-Tester l'application Node
-bash
-Copier le code
+docker compose down
+
+
+Supprimer les volumes (réinitialisation complète) :
+
+docker compose down -v
+
+
+Tester l'application :
+
 curl http://localhost:8080
 curl http://localhost:8080/metrics
-Générer du trafic pour voir les métriques évoluer
-bash
-Copier le code
-watch -n 0.2 curl -s http://localhost:8080 > /dev/null
-Vérifier les métriques sur Prometheus
-Aller dans :
-🔎 http://IP_PUBLIC:9090 → Status → Targets
 
-🛑 Arrêter la stack
-bash
-Copier le code
-docker compose down
-Supprimer les volumes :
+Améliorations possibles
 
-bash
-Copier le code
-docker compose down -v
-📌 Améliorations possibles
+Ajouter Alertmanager (alertes)
+
 Ajouter Loki + Promtail (logs)
 
-Ajouter Alertmanager (alerting)
+Ajouter une authentification Azure AD
 
-Connecter Grafana à Azure AD
+Déploiement automatisé via Terraform
 
-Déploiement Terraform
+Conclusion
 
-Déployer la stack sur plusieurs VM
+Cette stack permet de mettre en place un monitoring simple et efficace sur une machine Azure en utilisant Docker.
+Elle offre une visibilité complète sur :
 
-✅ Conclusion
-Cette stack fournit une solution complète de monitoring applicatif et système :
+l’état de l’application
 
-👉 Node.js expose des métriques personnalisées
-👉 Node Exporter expose les métriques système
-👉 Prometheus collecte les métriques
-👉 Grafana permet d’analyser et visualiser
+les métriques système
 
-
-
-
-
-
-
-
-
+l’évolution des performances dans Grafana
