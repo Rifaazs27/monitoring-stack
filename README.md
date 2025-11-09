@@ -112,8 +112,8 @@ curl http://localhost:8080/metrics
 Cette stack permet de mettre en place un monitoring simple et efficace sur une machine Azure en utilisant Docker.
 Elle offre une visibilité complète sur :
 
-l’état de l’application
+- L’état de l’application
 
-les métriques système
+- Les métriques système
 
-l’évolution des performances dans Grafana
+- L’évolution des performances dans Grafana
