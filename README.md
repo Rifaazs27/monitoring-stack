@@ -85,7 +85,7 @@ monitoring-stack/
 └── README.md
 
 
-##Commandes utiles
+## Commandes utiles
 
 Arrêter la stack :
 
@@ -100,14 +100,14 @@ docker compose down -v
 ```
 
 
-##Tester l'application :
+## Tester l'application
 
 ```bash
 curl http://localhost:8080
 curl http://localhost:8080/metrics
 ```
 
-##Conclusion
+## Conclusion
 
 Cette stack permet de mettre en place un monitoring simple et efficace sur une machine Azure en utilisant Docker.
 Elle offre une visibilité complète sur :
