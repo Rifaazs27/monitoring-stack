@@ -88,19 +88,23 @@ monitoring-stack/
 
 Arrêter la stack :
 
+```bash
 docker compose down
-
+```
 
 Supprimer les volumes (réinitialisation complète) :
 
+```bash
 docker compose down -v
+```
 
 
 ##Tester l'application :
 
+```bash
 curl http://localhost:8080
 curl http://localhost:8080/metrics
-
+```
 
 ##Conclusion
 
