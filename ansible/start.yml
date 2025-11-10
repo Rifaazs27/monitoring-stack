@@ -1,0 +1,77 @@
+---
+- name: Déployer et démarrer la stack monitoring Clic-Santé
+  hosts: all
+  become: yes
+
+  tasks:
+    - name: Vérifier que Docker est installé
+      command: docker --version
+      register: docker_version
+      ignore_errors: yes
+
+    - name: Installer Docker et Docker Compose si absent
+      apt:
+        name: "{{ item }}"
+        state: present
+      loop:
+        - docker.io
+        - docker-compose
+      when: docker_version.failed
+
+    - name: Ajouter l'utilisateur au groupe docker
+      user:
+        name: azureuser
+        groups: docker
+        append: yes
+
+    - name: Activer et démarrer Docker
+      systemd:
+        name: docker
+        state: started
+        enabled: yes
+
+    - name: Créer dossier pour la stack monitoring
+      file:
+        path: /opt/monitoring
+        state: directory
+        owner: azureuser
+        group: azureuser
+        mode: '0755'
+
+    - name: Copier docker-compose.yml sur la VM
+      copy:
+        src: ../docker-compose.yml
+        dest: /opt/monitoring/docker-compose.yml
+        owner: azureuser
+        group: azureuser
+        mode: '0644'
+
+    - name: Copier prometheus.yml sur la VM
+      copy:
+        src: ../prometheus/prometheus.yml
+        dest: /opt/monitoring/prometheus.yml
+        owner: azureuser
+        group: azureuser
+        mode: '0644'
+
+    - name: Copier le code Node.js sur la VM
+      copy:
+        src: ../app/
+        dest: /opt/monitoring/app/
+        owner: azureuser
+        group: azureuser
+
+    - name: Installer les dépendances Node.js
+      command: npm install
+      args:
+        chdir: /opt/monitoring/app
+
+    - name: Lancer l'application Node.js
+      command: npm start
+      args:
+        chdir: /opt/monitoring/app
+
+    - name: Démarrer la stack Docker
+      command: docker-compose up -d
+      args:
+        chdir: /opt/monitoring
